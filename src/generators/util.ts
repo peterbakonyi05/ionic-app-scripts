@@ -1,4 +1,4 @@
-import { basename, dirname, join, relative } from 'path';
+import { basename, dirname, join, relative, sep } from 'path';
 import { readdirSync } from 'fs';
 import { Logger} from '../logger/logger';
 import { toUnixPath } from '../util/helpers';
@@ -158,7 +158,7 @@ export function nonPageFileManipulation(context: BuildContext, name: string, ngM
     fileContent = content;
     return generateTemplates(context, hydratedRequest);
   }).then(() => {
-    const importPath = toUnixPath(`${relative(dirname(ngModulePath), hydratedRequest.dirToWrite)}/${hydratedRequest.fileName}`);
+    const importPath = toUnixPath(`${relative(dirname(ngModulePath), hydratedRequest.dirToWrite)}${sep}${hydratedRequest.fileName}`);
 
     fileContent = insertNamedImportIfNeeded(ngModulePath, fileContent, hydratedRequest.className, importPath);
     if (type === 'provider') {
@@ -174,7 +174,7 @@ export function tabsModuleManipulation(tabs: string[][], hydratedRequest: Hydrat
   const ngModulePath = tabs[0].find((element: any): boolean => {
     return element.indexOf('module') !== -1;
   });
-  const tabsNgModulePath = `${hydratedRequest.dirToWrite}/${hydratedRequest.fileName}.module.ts`;
+  const tabsNgModulePath = `${hydratedRequest.dirToWrite}${sep}${hydratedRequest.fileName}.module.ts`;
   const importPath = toUnixPath(relative(dirname(tabsNgModulePath), ngModulePath.replace('.module.ts', '')));
 
   return readFileAsync(tabsNgModulePath).then((content) => {
