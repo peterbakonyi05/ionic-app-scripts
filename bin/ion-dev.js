@@ -93,7 +93,7 @@ window.IonicDevServer = {
   },
 
   reloadApp: function() {
-    window.location.reload(true);
+    window.location.href = "/";
   },
 
   openConnection: function() {
